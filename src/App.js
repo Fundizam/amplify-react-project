@@ -1,6 +1,6 @@
 import React, { useState, useEffect} from "react";
 import { Amplify, API, graphqlOperation, Storage } from 'aws-amplify';
-import { createTodo } from "./graphql/mutations";
+import { createTodo, deleteTodo } from "./graphql/mutations";
 import { listTodos } from './graphql/queries'
 import { Authenticator } from "@aws-amplify/ui-react";
 import awsExports from "./aws-exports";
@@ -64,6 +64,13 @@ const App = () => {
     }
   }
 
+  async function deleteTodo({id})
+  {
+    const newTodosArray = todos.filter(todo => todo.id !==id);
+    setTodos(newTodosArray);
+    await API.graphql(graphqlOperation(deleteTodo, {input: id}));
+  }
+
   async function onChange(e)
   {
     if (!e.target.files[0]) 
@@ -106,7 +113,10 @@ const App = () => {
             <div key={todo.id ? todo.id : index} style={styles.todo}>
               <p style={styles.todoName}>{todo.name}</p>
               <p style={styles.todoDescription}>{todo.description}</p>
-
+              <button onClick={() => deleteTodo(todo)}>Delete Todo</button>
+              {
+                todo.image && <img src={todo.image} style={{width: 400}}/>
+              }
             </div>
           ))
         }
@@ -126,8 +136,3 @@ const styles = {
 }
 
 export default App;
-/*
-<button onClick={() => deleteNote(note)}>Delete Note</button>
-{
-  note.image && <img src={note.image} style={{width: 400}}/>
-}*/
