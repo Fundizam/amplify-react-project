@@ -64,7 +64,7 @@ const App = () => {
     }
   }
 
-  async function deleteTodo({id})
+  async function removeTodo({id})
   {
     const newTodosArray = todos.filter(todo => todo.id !==id);
     setTodos(newTodosArray);
@@ -113,9 +113,9 @@ const App = () => {
             <div key={todo.id ? todo.id : index} style={styles.todo}>
               <p style={styles.todoName}>{todo.name}</p>
               <p style={styles.todoDescription}>{todo.description}</p>
-              <button onClick={() => deleteTodo(todo)}>Delete Todo</button>
+              <button onClick={() => removeTodo(todo)}>Delete Todo</button>
               {
-                todo.image && <img src={todo.image} style={{width: 400}}/>
+                todo.image && <img src={todo.image} style={{width: 400}} alt="Todo picture"/>
               }
             </div>
           ))
